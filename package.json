@@ -28,6 +28,8 @@
     "@caporal/core": "^2.0.2",
     "chalk": "^4.1.0",
     "exceljs": "^4.2.0",
-    "inquirer": "^7.3.3"
+    "inquirer": "^7.3.3",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.4.0"
   }
 }
