@@ -55,7 +55,8 @@ export async function checkOpgaver(): Promise<SortedOpgaver[]> {
         try {
             files = readdirSync(join(userOpgaverPath, category))
                 .filter(file => file.includes('.pdf'))
-                .map(file => file.replace('.pdf', ''));
+                .map(file => file.replace('.pdf', ''))
+                .filter(file => opgaver[category].includes(file.slice(0, 3)));
         } catch (error) {
             mkdirSync(join(userOpgaverPath, category));
         }
