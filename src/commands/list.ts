@@ -7,14 +7,19 @@ import { CliCommand, IOption } from "./command.interface";
 @injectable()
 export class ListCommand extends CliCommand {
     name = ['list', 'overview', 'all'];
-    options: IOption[] = [{ synopsis: '-p, --procent', description: 'Display number in procent' }]
+    options: IOption[] = [
+        { synopsis: '-p, --procent', description: 'Display number in procent' },
+        { synopsis: '-u, --update', description: 'Updates the assignment list before displaying them' }
+    ]
     description = 'Quick view over the tasks';
 
     constructor(
         private taskService: TaskService
     ) { super(); }
 
-    action({options}) {
+    async action({options}) {
+        if(options.update) await this.taskService.updateAssignments();
+        
         let categorysToShow = { a: 'A', b: 'B', c: 'C', missing: 'Missing', g: 'Genafleverings' };
 
         let assignments = this.taskService.currentAssignments;

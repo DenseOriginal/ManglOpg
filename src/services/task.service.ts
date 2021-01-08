@@ -9,7 +9,8 @@ export class TaskService {
         this.updateAssignments();
     }
 
-    async updateAssignments() {
+    async updateAssignments(): Promise<void> {
         this.currentAssignments = await checkOpgaver();
+        return Promise.resolve();
     }
 }
