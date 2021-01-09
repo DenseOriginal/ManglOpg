@@ -8,6 +8,7 @@ import { ListCommand } from './commands/list';
 import { ViewCommand } from './commands/view';
 import { container } from 'tsyringe';
 import { TaskService } from "./services/task.service";
+import { StatusCommand } from "./commands/status";
 
 program
     .disableGlobalOption('quiet')
@@ -19,7 +20,8 @@ let commandClasses = [
     UpdateCommand,
     ClearCommand,
     ListCommand,
-    ViewCommand
+    ViewCommand,
+    StatusCommand
 ];
 
 container.register<TaskService>(TaskService, { useValue: new TaskService })
