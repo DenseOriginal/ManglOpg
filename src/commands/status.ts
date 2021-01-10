@@ -80,7 +80,7 @@ export class StatusCommand extends CliCommand {
             console.log(sentencesToPrint.join('\n'));
         } else {
             let doneMsg = AllDoneMessages[~~(Math.random() * AllDoneMessages.length)];
-            console.log(chalk[Colors.a](doneMsg));
+            console.log('- ' + chalk[Colors.a](doneMsg));
         }
 
         console.log('\n')
