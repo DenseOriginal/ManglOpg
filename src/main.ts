@@ -26,7 +26,7 @@ let commandClasses = [
 
 container.register<TaskService>(TaskService, { useValue: new TaskService })
 let commands = commandClasses.map((commandClass: any) => container.resolve(commandClass));
-commands.forEach((command: any) => command.initCommand(program));
+commands.forEach((command: any) => command.buildCommand(program));
 
 async function getInput() {
     let answer = await prompt({

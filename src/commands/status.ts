@@ -1,10 +1,9 @@
 import chalk from "chalk";
-import { injectable } from "tsyringe";
 import { Colors } from "../constants/colors";
 import { map } from "../helpers/map";
 import { TaskService } from "../services/task.service";
-import { CliCommand, IOption } from "./command.interface";
 import { AllDoneMessages } from "../constants/all-done";
+import { CliCommandDecorator } from "../core/decorator";
 
 export interface IStats {
     a: number;
@@ -22,15 +21,15 @@ const statusSentences = {
     missing: 'You are missing ${n} assignment(s)',
 };
 
-@injectable()
-export class StatusCommand extends CliCommand {
-    name = ['status'];
-    description = 'Gives a status';
-    options: IOption[] = [
+@CliCommandDecorator({
+    names: ['status'],
+    description: 'Gives a status',
+    options: [
         { synopsis: '--hide-bar', description: 'Hides status bar' }
     ]
-
-    constructor(private taskService: TaskService) { super() }
+})
+export class StatusCommand {
+    constructor(private taskService: TaskService) { }
 
     action({ options }) {
         const stats: IStats = this.taskService.currentAssignments
@@ -70,13 +69,13 @@ export class StatusCommand extends CliCommand {
             // console.log('└' + '─'.repeat(terminalWidth) + '┘');
         }
 
-        if(stats.a != totalAssignments) {
+        if (stats.a != totalAssignments) {
             let sentencesToPrint = Object.entries(statusSentences)
                 .map(([type, sentence]) => {
-                    if(stats[type] == 0) return undefined;
+                    if (stats[type] == 0) return undefined;
                     return '- ' + chalk[Colors[type]](sentence.replace('${n}', stats[type]));
                 }).filter(sentence => sentence);
-    
+
             console.log(sentencesToPrint.join('\n'));
         } else {
             let doneMsg = AllDoneMessages[~~(Math.random() * AllDoneMessages.length)];

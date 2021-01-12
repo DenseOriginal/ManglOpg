@@ -3,24 +3,22 @@ import chalk from "chalk";
 import { prompt } from "inquirer";
 import { inject, injectable } from "tsyringe";
 import { Colors } from "../constants/colors";
+import { CliCommandDecorator } from "../core/decorator";
 import { SortedOpgaver } from "../get-opgaver";
 import { TaskService } from "../services/task.service";
-import { CliCommand, IArgument, IOption } from "./command.interface";
 
-@injectable()
-export class ViewCommand extends CliCommand {
-    name = ['view', 'info', 'show'];
-    description = 'View a chapter';
-    arguments: IArgument[] = [{ synopsis: '[chapter]', description: 'Chapter to view' }];
-    options: IOption[] = [
+@CliCommandDecorator({
+    names: ['view', 'info', 'show'],
+    description: 'View a chapter',
+    arguments: [{ synopsis: '[chapter]', description: 'Chapter to view' }],
+    options: [
         { synopsis: '-L, --list', description: 'List chapters' },
         { synopsis: '--hide-a', description: 'Hides A tasks' },
         { synopsis: '-h, --hide-empty', description: 'Hides empty tasks' }
-    ];
-
-    constructor(
-        private taskService: TaskService
-    ) { super() }
+    ]
+})
+export class ViewCommand {
+    constructor(private taskService: TaskService) { }
 
     async action({ args, options }) {
         let chapterName: string;

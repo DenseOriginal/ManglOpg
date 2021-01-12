@@ -1,25 +1,22 @@
 import chalk from "chalk";
-import { injectable } from "tsyringe";
 import { Colors } from "../constants/colors";
+import { CliCommandDecorator } from "../core/decorator";
 import { TaskService } from "../services/task.service";
-import { CliCommand, IOption } from "./command.interface";
 
-@injectable()
-export class ListCommand extends CliCommand {
-    name = ['list', 'overview', 'all'];
-    options: IOption[] = [
+@CliCommandDecorator({
+    names: ['list', 'overview', 'all'],
+    description: 'Quick view over the tasks',
+    options: [
         { synopsis: '-p, --procent', description: 'Display number in procent' },
         { synopsis: '-u, --update', description: 'Updates the assignment list before displaying them' }
     ]
-    description = 'Quick view over the tasks';
+})
+export class ListCommand {
+    constructor(private taskService: TaskService) { }
 
-    constructor(
-        private taskService: TaskService
-    ) { super(); }
+    async action({ options }) {
+        if (options.update) await this.taskService.updateAssignments();
 
-    async action({options}) {
-        if(options.update) await this.taskService.updateAssignments();
-        
         let categorysToShow = { a: 'A', b: 'B', c: 'C', missing: 'Missing', g: 'Genafleverings' };
 
         let assignments = this.taskService.currentAssignments;
