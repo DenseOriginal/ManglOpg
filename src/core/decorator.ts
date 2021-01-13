@@ -22,7 +22,7 @@ export interface IOption {
 }
 
 export function CliCommandDecorator(options: CliCommandOptions) {
-    return function (target: constructor<unknown>) {
+    return function (target: constructor<any>) {
         let injectableDecorator = injectable();
         injectableDecorator(target);
 
