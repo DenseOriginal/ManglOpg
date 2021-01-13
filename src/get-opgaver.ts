@@ -1,7 +1,8 @@
 import * as Excel from "exceljs";
 import { join } from "path";
-import { mkdirSync, readdirSync } from "fs";
+import { mkdirSync, readdirSync, existsSync } from "fs";
 import { homedir, platform } from 'os';
+import chalk from "chalk";
 
 export type Opgaver = { [index: string]: string[] };
 export interface SortedOpgaver {
@@ -21,12 +22,28 @@ function numsFromRange(input: string): string[] {
 }
 
 let pathToAarhusTECH = join(homedir(), platform() == "darwin" ? 'Documents' : '', 'AARHUS TECH');
+if (!existsSync(pathToAarhusTECH)) {
+    // Error if AARHUS TECH folder isn't synchronized to the device
+    console.error(chalk.redBright`AARHUS TECH folder couldn't be found at ${pathToAarhusTECH}`);
+    console.error('Hint: ' + chalk.cyanBright`Make sure that your AARHUS TECH folder is synchronized to your computer`);
+    process.exit();
+}
 let userDirectory = readdirSync(pathToAarhusTECH).find((s) => !!(s.match(/(Mirsad Kadribasic - )(?!20RInfoMappe)\w+/g)));
-if (!userDirectory) throw new Error('Cannot find user folder');
+if (!userDirectory) {
+    // Error if userDirectory wasn't found
+    console.error(chalk.redBright`Couldn't find your userDirectory in ${pathToAarhusTECH}`);
+    process.exit();
+};
 
 let workbook = new Excel.Workbook();
 let opgaverSheetPath = join(pathToAarhusTECH, 'Mirsad Kadribasic - 20RInfoMappe/Opgaver20R.xlsx');
 let userOpgaverPath = join(pathToAarhusTECH, userDirectory);
+
+if (!existsSync(opgaverSheetPath)) {
+    // Error if userDirectory wasn't found
+    console.error(chalk.redBright`Couldn't find Opgaver20R.xlsx at ${opgaverSheetPath}`);
+    process.exit();
+};
 
 async function getOpgaver(): Promise<Opgaver> {
     await workbook.xlsx.readFile(opgaverSheetPath)
