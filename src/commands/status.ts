@@ -4,6 +4,7 @@ import { map } from "../helpers/map";
 import { TaskService } from "../services/task.service";
 import { AllDoneMessages } from "../constants/all-done";
 import { CliCommandDecorator } from "../core/decorator";
+import { SettingsService } from "../services/settings.service";
 
 export interface IStats {
     a: number;
@@ -29,7 +30,10 @@ const statusSentences = {
     ]
 })
 export class StatusCommand {
-    constructor(private taskService: TaskService) { }
+    constructor(
+        private taskService: TaskService,
+        private settingsService: SettingsService
+    ) { }
 
     action({ options }) {
         const stats: IStats = this.taskService.currentAssignments
@@ -58,11 +62,13 @@ export class StatusCommand {
         // Drawing the bar
         // Only of --hide-bar flag is not enabled
         if (!options.hideBar) {
+            let statusBarChar = this.settingsService.getSetting('statusBarChar');
+            
             // console.log('┌' + '─'.repeat(terminalWidth) + '┐');
             console.log(
                 '0 |' +
                 Object.entries(statsAsPercent).map(([type, n]) => {
-                    return chalk[Colors[type]]('█'.repeat(n));
+                    return chalk[Colors[type]](statusBarChar.repeat(n));
                 }).join('') +
                 '| ' + totalAssignments
             );
