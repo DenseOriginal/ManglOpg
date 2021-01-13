@@ -9,6 +9,7 @@ import { ViewCommand } from './commands/view';
 import { container } from 'tsyringe';
 import { TaskService } from "./services/task.service";
 import { StatusCommand } from "./commands/status";
+import { SettingsService } from "./services/settings.service";
 
 program
     .disableGlobalOption('quiet')
@@ -24,7 +25,8 @@ let commandClasses = [
     StatusCommand
 ];
 
-container.register<TaskService>(TaskService, { useValue: new TaskService })
+container.register<TaskService>(TaskService, { useValue: new TaskService });
+container.register<SettingsService>(SettingsService, { useValue: new SettingsService });
 let commands = commandClasses.map((commandClass: any) => container.resolve(commandClass));
 commands.forEach((command: any) => command.buildCommand(program));
 
