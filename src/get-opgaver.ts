@@ -52,9 +52,16 @@ async function getOpgaver(): Promise<Opgaver> {
     let opgaver: Opgaver = {};
 
     worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-        let [, category, rawTasks] = (row.values as string[]);
+        let [, category, ...rawTasksRow] = (row.values as string[]);
         let tasks: string[] = [];
-        rawTasks.split(',').map((cur) => tasks.push(...numsFromRange(cur)));
+        
+        rawTasksRow.forEach(rawTasks => {
+            rawTasks
+                .toString()
+                .replace('.', ',')
+                .split(',')
+                .map((cur) => tasks.push(...numsFromRange(cur)));
+        });
         opgaver[category] = tasks
     });
 
