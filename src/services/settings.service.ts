@@ -2,10 +2,11 @@ import chalk from "chalk";
 import { existsSync, readFileSync, writeFileSync } from "fs";
 import { homedir } from "os";
 import { join } from "path";
-import { injectable } from "tsyringe";
+import { injectable, singleton } from "tsyringe";
 
 const defaultSettings = {
-    statusBarChar: '█'
+    statusBarChar: '█',
+    startCommand: ''
 };
 
 type settingsType = typeof defaultSettings;

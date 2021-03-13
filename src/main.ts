@@ -41,4 +41,17 @@ async function getInput() {
     });
 }
 
-getInput();
+async function main() {
+    // Instantiat the settings service
+    // So that we can check if we should run a start command
+    const settingsService = container.resolve(SettingsService);
+    const startCommand = settingsService.getSetting('startCommand');
+    if (startCommand) {
+        await container.resolve(TaskService).updateAssignments();
+        await program.run(startCommand.split(' ')).catch(() => console.log(`An error happened trying to run the start command: "${startCommand}"`));
+    }
+
+    getInput();
+}
+
+main();
