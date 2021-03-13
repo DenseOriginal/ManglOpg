@@ -13,6 +13,7 @@ type settingsType = typeof defaultSettings;
 const settingsPath = join(homedir(), '.manglopg.json');
 
 @injectable()
+@singleton()
 export class SettingsService {
     settings: settingsType = {} as any;
 

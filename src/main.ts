@@ -25,8 +25,6 @@ let commandClasses = [
     StatusCommand
 ];
 
-container.register<TaskService>(TaskService, { useValue: new TaskService });
-container.register<SettingsService>(SettingsService, { useValue: new SettingsService });
 let commands = commandClasses.map((commandClass: any) => container.resolve(commandClass));
 commands.forEach((command: any) => command.buildCommand(program));
 
