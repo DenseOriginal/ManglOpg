@@ -21,7 +21,7 @@ function numsFromRange(input: string): string[] {
     return Array.from({ length: to - from + 1 }, (_, i) => ('000' + (from + i)).slice(-3));
 }
 
-let pathToAarhusTECH = join(homedir(), platform() == "darwin" ? 'Documents' : '', 'AARHUS TECH');
+let pathToAarhusTECH = join(homedir(), platform() == "darwin" ?  /* 'Documents' */ '' : '', 'AARHUS TECH');
 if (!existsSync(pathToAarhusTECH)) {
     // Error if AARHUS TECH folder isn't synchronized to the device
     console.error(chalk.redBright`AARHUS TECH folder couldn't be found at ${pathToAarhusTECH}`);
