@@ -46,7 +46,7 @@ if (!existsSync(opgaverSheetPath)) {
 };
 
 async function getOpgaver(): Promise<Opgaver> {
-    await workbook.xlsx.readFile(opgaverSheetPath)
+    await workbook.xlsx.readFile(opgaverSheetPath);
     let worksheet = workbook.worksheets[0];
 
     let opgaver: Opgaver = {};
@@ -54,6 +54,8 @@ async function getOpgaver(): Promise<Opgaver> {
     worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
         let [, category, rawTasks] = (row.values as string[]);
         let tasks: string[] = [];
+        if(!rawTasks) return;
+
         rawTasks.split(',').map((cur) => tasks.push(...numsFromRange(cur)));
         opgaver[category] = tasks
     });
