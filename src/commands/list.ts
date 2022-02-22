@@ -7,6 +7,7 @@ import { TaskService } from "../services/task.service";
     names: ['list', 'overview', 'all'],
     description: 'Quick view over the tasks',
     options: [
+        { synopsis: '-a, --all', description: 'Displays all chapter' },
         { synopsis: '-p, --procent', description: 'Display number in procent' },
         { synopsis: '-u, --update', description: 'Updates the assignment list before displaying them' }
     ]
@@ -27,6 +28,8 @@ export class ListCommand {
                 return acc + (category[group]?.length || 0);
             }, 0);
 
+            if(!options.all && totalAssignments == category['a']?.length) return '';
+
             let prettyAssignments: string[] = Object.entries(categorysToShow).map(([key, label]) => {
                 let number: string = options.procent ? (totalAssignments / category[key]?.length * 100) : category[key]?.length;
                 number = number || '0';
@@ -37,6 +40,8 @@ export class ListCommand {
 
             return `${category.kapitel.padEnd(longestKapitel, ' ')}|  ` + prettyAssignments.join('  ');
         })
+
+        assignmentsToPrint = assignmentsToPrint.filter(line => !!line);
 
         assignmentsToPrint.unshift('');
         assignmentsToPrint.push('');
