@@ -12,6 +12,7 @@ import { TaskService } from "../services/task.service";
     description: 'View a chapter',
     arguments: [{ synopsis: '[chapter]', description: 'Chapter to view' }],
     options: [
+        { synopsis: '-a, --all', description: 'Display finished chapters' },
         { synopsis: '-L, --list', description: 'List chapters' },
         { synopsis: '--hide-a', description: 'Hides A tasks' },
         { synopsis: '-h, --hide-empty', description: 'Hides empty tasks' }
@@ -31,7 +32,8 @@ export class ViewCommand {
                 type: 'list',
                 message: 'Choose a chapter to view',
                 name: 'chapter',
-                choices: assignments.map(chp => chp.kapitel)
+                // Filter out done chapters, if the all flag isn't on
+                choices: assignments.filter(chp => (options.all || !chp.done)).map(chp => chp.kapitel)
             });
 
             chapterName = chapterPropmt.chapter;
